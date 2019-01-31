@@ -1,0 +1,244 @@
+= AsciiDocの書き方
+:source-highlighter: coderay
+typetonk2 <typetonk2@gmail.com>
+v0.1, 2019/01/31:
+:toc: macro
+:sectnums:
+
+:toc-title: 目次
+:toc-levels: 4
+
+:hoge: 追加した属性値
+
+// 以下のコメントを外すと、admonitionにアイコンが付く。
+++++
+<link rel="stylesheet"
+  href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.1.0/css/font-awesome.min.css">
+++++
+:icons: font
+
+== はじめに
+
+AsciiDocのruby実装である
+http://asciidoctor.org/docs/user-manual/[asciidoctor]
+での記述についてのメモ。
+
+Markdownと比べてかなり記法が多いため、自分が使いそうなものに限定して記述する。
+
+toc::[]
+
+== 文書タイトルを設定する
+
+http://asciidoctor.org/docs/user-manual/#doc-header
+
+----
+= AsciiDocの書き方
+typetonk2 <typetonk2@gmail.com>
+v0.1, 2019/01/31:
+----
+
+== 目次を付ける
+
+http://asciidoctor.org/docs/user-manual/#user-toc
+
+----
+:toc:
+----
+
+ヘッダー以外に配置する事もできる。
+----
+:toc: macro
+<snip>
+toc::[]
+----
+
+[WARNING]
+後述するPDF化の手順では、目次の場所を変更する事は出来ない。 +
+https://github.com/asciidoctor/asciidoctor-pdf/issues/233[Can't control PDF TOC output location · Issue #233 · asciidoctor/asciidoctor-pdf · GitHub]
+
+== 文書の情報を参照する
+
+----
+作者: {author} +
+アドレス: {email} +
+バージョン: {revnumber} +
+更新日: {revdate}
+hoge: {hoge}
+----
+
+作者: {author} +
+アドレス: {email} +
+バージョン: {revnumber} +
+更新日: {revdate} +
+hoge: {hoge}
+
+== セクションに番号を付ける
+
+`:sectnums:` を付けると、セクション番号の付与をコントロールできる。
+
+----
+:sectnums:
+== 番号付きセクション
+=== 番号付きセクション
+:sectnums!:
+== 番号無しセクション
+=== 番号無しセクション
+----
+
+:sectnums:
+== 番号付きセクション
+
+番号付き1
+
+=== 番号付きセクション
+
+番号付き2
+
+:sectnums!:
+
+== 番号無しセクション
+
+番号無し1
+
+=== 番号無しセクション
+
+番号無し2
+
+:sectnums:
+
+== リストを作る
+
+----
+.番号リスト
+. 1
+.. 2
+... 3
+
+---
+
+.リスト
+* 1
+** 2
+*** 3
+----
+
+. 1
+.. 2
+... 3
+
+---
+
+* 1
+** 2
+*** 3
+
+=== タイトル付きのリスト
+
+----
+.番号リスト
+. 1
+.. 2
+... 3
+----
+.番号リスト
+. 1
+.. 2
+... 3
+
+== テーブルを作る
+
+----
+.テーブル
+[options="header, autowidth"]
+|====================
+| 版数 | 制改訂年月日 | 制定/改訂事項 | 制改訂者
+| 0.1 | 平成30年02月20日 | 初版作成 | typetonk2
+|====================
+----
+
+.テーブル
+[options="header, autowidth"]
+|====================
+| 版数 | 制改訂年月日     | 制定/改訂事項 | 制改訂者
+| 0.1  | 平成30年02月20日 | 初版作成      | typetonk2
+|====================
+
+.vertical table
+[cols="h,1,1,1" options="header"]
+|===
+|   | h1 | h2 | h3
+|h1 | 1 | 2 | 3
+|h2 | a | b | c
+|h3 | 9 | 8 | 7
+|===
+
+== コードハイライト
+
+.app.rb 
+[source,ruby]  
+---- 
+require 'sinatra'
+
+get '/hi' do
+  "Hello World!"
+end
+----
+
+.test.go
+[source,go]
+----
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("vim-go")
+}
+----
+
+== asciidoctor-diagram
+
+https://asciidoctor.org/docs/asciidoctor-diagram
+
+mermaidやplantuml等、色々な図形を描画するためのツールを使用できる。
+
+=== plantuml
+
+シーケンス、アクティビティ、クラス等、色々。
+
+CAUTION: 外部ファイル取り込みでは表示されないされない。 +
+vscode-asciidocでは表示されない。(2019/01/31 時点) +
+http://www.plantuml.com に接続できない場合、表示されない。
+
+[plantuml]
+....
+actor Foo1
+boundary Foo2
+control Foo3
+entity Foo4
+database Foo5
+collections Foo6
+Foo1 -> Foo2 : To boundary
+Foo1 -> Foo3 : To control
+Foo1 -> Foo4 : To entity
+Foo1 -> Foo5 : To database
+Foo1 -> Foo6 : To collections
+....
+
+=== mermaid
+
+[mermaid]
+....
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+....
+
+
+== 参考
+
+* http://powerman.name/doc/asciidoc#_level_1[Asciidoc cheatseat]
+
+* http://asciidoctor.org/docs/user-manual/#user-toc[Asciidoctor user manual]
